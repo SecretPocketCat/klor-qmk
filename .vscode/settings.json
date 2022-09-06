@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "select_word.h": "c",
+        "iterator": "c",
+        "xhash": "c",
+        "xtree": "c"
+    }
+}

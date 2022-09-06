@@ -33,6 +33,12 @@ CONSOLE_ENABLE = no
 COMMAND_ENABLE = no
 MOUSEKEY_ENABLE = no
 SPACE_CADET_ENABLE = no
-GRAVE_ESC_ENABLE = no 
+GRAVE_ESC_ENABLE = no
 MAGIC_ENABLE = no
 
+#Autoshift
+AUTO_SHIFT_ENABLE = no
+
+#Extras
+SRC += features/layer_lock.c
+SRC += features/select_word.c
