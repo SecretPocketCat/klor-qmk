@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 #include "klor.h"
 #include "raw_hid.h"
 #include "features/layer_lock.h"
@@ -21,15 +22,13 @@ enum custom_keycodes {
     COLEMAK = SAFE_RANGE,
     QWERTY,
     _MT_QUESTIONMARK,
-    _LT_BKCSP_WORD,
     LAYER_LOCK,
     SELECT_WORD,
     SELECT_LINE,
 };
 
 // Left Alt because right would be AltGr
-#define MT_QUESTIONMARK LALT_T(_MT_QUESTIONMARK)
-#define LT_BKCSP_WORD LT(_SYM, _LT_BKCSP_WORD)
+#define MT_ALT_QUESTIONMARK LALT_T(_MT_QUESTIONMARK)
 
 enum unicode_names {
     A_ACUTE,
@@ -134,6 +133,8 @@ const uint32_t PROGMEM unicode_map[] = {
 enum hid_data_types {
     HID_LAYER = 1,
     HID_CAPSWORD,
+    HID_CAPSLOCK,
+    HID_SHIFT,
 };
 
 void send_hid_data(uint8_t type, uint8_t value) {
@@ -154,11 +155,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // bottom L
         XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_COMMA), KC_LSPO, KC_V, XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, KC_M, KC_RSPC, MT(MOD_LCTL, KC_DOT), MT_QUESTIONMARK, XXXXXXX,
+        XXXXXXX, XXXXXXX, KC_M, KC_RSPC, MT(MOD_LCTL, KC_DOT), MT_ALT_QUESTIONMARK, XXXXXXX,
         // thumb L
         LT(_WIN, KC_ESC), LT(_NAV, KC_SPC), LT(_UNI, KC_TAB), XXXXXXX,
         // thumb R
-        XXXXXXX, LT(_FUN, KC_ENT), LT(_NUM, KC_BSPC), LT_BKCSP_WORD),
+        XXXXXXX, LT(_FUN, KC_ENT), LT(_NUM, KC_BSPC), LT(_SYM, KC_DELETE)),
 
     // todo: gaming/qwerty layout
     [_QWERTY] = LAYOUT_polydactyl(KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_TAB, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_DEL, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_MUTE, KC_MPLY, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT, LT(_WIN, KC_ESC), LT(_NAV, KC_SPC), LT(_UNI, KC_TAB), XXXXXXX, XXXXXXX, LT(_FUN, KC_ENT), LT(_NUM, KC_BSPC), LT(_SYM, KC_DEL)),
@@ -173,13 +174,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid R
         MEH(KC_F1) /* TODO: fluent search */, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, CAPS_WORD,
         // bottom L
-        XXXXXXX, KC_LGUI, KC_LCTL, KC_LSFT, KC_LALT, XXXXXXX, XXXXXXX,
+        XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R - TODO: TILING WIN MANAGMENT? MOUSE ARROWS?
         XXXXXXX, XXXXXXX, SELECT_WORD, SELECT_LINE, XXXXXXX, KC_CAPS_LOCK, XXXXXXX,
         // thumb L
         XXXXXXX, MO(_NAV), XXXXXXX, XXXXXXX,
         // thumb R
-        XXXXXXX, LSFT(KC_ENTER), KC_DELETE, RCTL(KC_DELETE)),
+        XXXXXXX, LSFT(KC_ENTER), RCTL(KC_BSPC), RCTL(KC_DELETE)),
 
     [_NUM] = LAYOUT_polydactyl(
         // top L
@@ -189,7 +190,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid L
         KC_PIPE, KC_0, KC_1, KC_2, KC_3, KC_EXCLAIM,
         // mid R
-        XXXXXXX, KC_PLUS, KC_MINUS, KC_ASTERISK, KC_SLASH, LAYER_LOCK,
+        XXXXXXX, KC_PLUS, KC_SLASH, KC_ASTERISK, KC_MINUS, LAYER_LOCK,
         // bottom L
         XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_4), KC_5, KC_6, XXXXXXX, XXXXXXX,
         // bottom R
@@ -245,7 +246,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid R
         XP(C_CARON, C_CARON_UPPER), XP(E_CARON, E_CARON_UPPER), XP(E_ACUTE, E_ACUTE_UPPER), XP(I_ACUTE, I_ACUTE_UPPER), XP(Y_ACUTE, Y_ACUTE_UPPER), XP(O_ACUTE, O_ACUTE_UPPER),
         // bottom L
-        XXXXXXX, KC_LGUI, KC_LCTL, KC_LSFT, KC_LALT, XXXXXXX, XXXXXXX,
+        XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
         XXXXXXX, XXXXXXX, XP(EMJ_SMILING_HEARTS, EMJ_BLOW_KISS), KC_RSFT, XP(EMJ_VOMIT, EMJ_NAUSEA), XP(EMJ_THUMBS_UP, EMJ_SUS), XXXXXXX,
         // thumb L
@@ -259,11 +260,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // mid L
-        LAYER_LOCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F24,
+        LAYER_LOCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, LCTL(KC_F24),
         // mid R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // bottom L
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // thumb L
@@ -277,11 +278,59 @@ char o_text[24] = "";
 
 void keyboard_post_init_user(void) {}
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_layer_lock(keycode, record, LAYER_LOCK)) {
+        return false;
+    }
+
+    if (!process_select_word_or_line(keycode, record, SELECT_WORD, SELECT_LINE)) {
+        return false;
+    }
+
+    if (record->event.pressed) {
+        switch (keycode) {
+            // Layer
+            case COLEMAK:
+                set_single_persistent_default_layer(_COLEMAK);
+                return false;
+            case QWERTY:
+                set_single_persistent_default_layer(_QWERTY);
+                return false;
+        }
+
+        // tap overrides
+        if (record->tap.count > 0) {
+            // do not continue with default tap action
+            // if the MT was pressed or released, but not held
+            switch (keycode) {
+                case MT_ALT_QUESTIONMARK:
+                    tap_code16(KC_QUESTION);
+                    return false;
+                    // case LT_BKCSP_WORD:
+                    //     SEND_STRING(SS_RCTL(SS_TAP(X_BACKSPACE)));
+                    //     return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 // todo: update oled with caps word
 void caps_word_set_user(bool active) {
     // caps_word = active;
     uprintf("capsword_%d\n", active);
     send_hid_data(HID_CAPSWORD, active);
+    // todo: disable capslock if capsword is active
+}
+
+void oneshot_mods_changed_user(uint8_t mods) {
+    static bool oneshot_shift = false;
+    bool        shift         = mods & MOD_MASK_SHIFT;
+    if (shift != oneshot_shift) {
+        send_hid_data(HID_SHIFT, shift);
+        println("Oneshot SHIFT");
+    }
 }
 
 bool is_timed_out_tap_key(uint16_t keycode, keyrecord_t *record) {
@@ -408,42 +457,4 @@ bool oled_task_kb(void) {
     //     // oled_write_raw_P(klor_face, sizeof(klor_face));
     // }
     return false;
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!process_layer_lock(keycode, record, LAYER_LOCK)) {
-        return false;
-    }
-
-    if (!process_select_word_or_line(keycode, record, SELECT_WORD, SELECT_LINE)) {
-        return false;
-    }
-
-    if (record->event.pressed) {
-        switch (keycode) {
-            // Layer
-            case COLEMAK:
-                set_single_persistent_default_layer(_COLEMAK);
-                return false;
-            case QWERTY:
-                set_single_persistent_default_layer(_QWERTY);
-                return false;
-        }
-
-        // tap overrides
-        if (record->tap.count > 0) {
-            // do not continue with default tap action
-            // if the MT was pressed or released, but not held
-            switch (keycode) {
-                case MT_QUESTIONMARK:
-                    tap_code16(KC_QUESTION);
-                    return false;
-                case LT_BKCSP_WORD:
-                    SEND_STRING(SS_RCTL(SS_TAP(X_BACKSPACE)));
-                    return false;
-            }
-        }
-    }
-
-    return true;
 }

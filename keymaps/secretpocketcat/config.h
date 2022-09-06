@@ -31,6 +31,8 @@ for more options.
 
 #define COMBO_COUNT 1
 
+//
+
 // Unicode
 #define UNICODE_SELECTED_MODES UC_WINC
 
@@ -42,8 +44,8 @@ for more options.
 #define LAYER_LOCK_IDLE_TIMEOUT 30000 // Turn off after 30 seconds.
 
 // Oneshot
-#define NO_ACTION_ONESHOT
-// #define ONESHOT_TIMEOUT 1000
+// #define NO_ACTION_ONESHOT
+#define ONESHOT_TIMEOUT 3000
 
 // Console - save flash
 #define NO_DEBUG
