@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "klor.h"
 #include "raw_hid.h"
+#include "virtser.h"
 #include "features/layer_lock.h"
 #include "features/select_word.h"
 
@@ -138,8 +139,10 @@ enum hid_data_types {
 };
 
 void send_hid_data(uint8_t type, uint8_t value) {
+#ifdef RAW_ENABLE
     uint8_t data[32] = {type, value};
     raw_hid_send(data, sizeof(data));
+#endif
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -174,7 +177,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid R
         MEH(KC_F1) /* TODO: fluent search */, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, CAPS_WORD,
         // bottom L
-        XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
+        XXXXXXX, OSM(MOD_LALT), OSM(MOD_LCTL), OSM(MOD_LSFT), OSM(MOD_LGUI), XXXXXXX, XXXXXXX,
         // bottom R - TODO: TILING WIN MANAGMENT? MOUSE ARROWS?
         XXXXXXX, XXXXXXX, SELECT_WORD, SELECT_LINE, XXXXXXX, KC_CAPS_LOCK, XXXXXXX,
         // thumb L

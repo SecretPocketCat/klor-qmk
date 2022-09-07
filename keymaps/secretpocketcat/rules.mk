@@ -28,6 +28,14 @@ MOUSEKEY_ENABLE = yes
 SPACE_CADET_ENABLE = yes
 COMMAND_ENABLE = no
 
-# HID
+#Autoshift
+AUTO_SHIFT_ENABLE = no
+
+#HID/Virtual Serial
 CONSOLE_ENABLE = yes
 RAW_ENABLE = yes
+VIRTSER_ENABLE = no
+
+#Extras
+SRC += features/layer_lock.c
+SRC += features/select_word.c
