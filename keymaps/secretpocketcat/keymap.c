@@ -270,10 +270,13 @@ void keyboard_post_init_user(void) {}
 uint8_t mod_state;
 uint8_t oneshot_mod_state;
 
-bool process_shifted_sequence(char sequence[]) {
+void clear_all_mods(void) {
     clear_mods();
     clear_oneshot_mods();
+}
 
+bool process_shifted_sequence(char sequence[]) {
+    clear_all_mods();
     send_string(sequence);
     return true;
 }
@@ -293,16 +296,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
+    mod_state         = get_mods();
+    oneshot_mod_state = get_oneshot_mods();
+
     if (record->event.pressed) {
-        switch (keycode) {
-            // Layer
-            case COLEMAK:
-                set_single_persistent_default_layer(_COLEMAK);
-                return false;
-            case QWERTY:
-                set_single_persistent_default_layer(_QWERTY);
-                return false;
-        }
+        // switch (keycode) {
+        //     // Layer
+        //     case COLEMAK:
+        //         set_single_persistent_default_layer(_COLEMAK);
+        //         return false;
+        //     case QWERTY:
+        //         set_single_persistent_default_layer(_QWERTY);
+        //         return false;
+        // }
 
         // tap overrides
         if (record->tap.count > 0) {
@@ -318,18 +324,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         }
 
-        mod_state         = get_mods();
-        oneshot_mod_state = get_oneshot_mods();
-
         if ((mod_state & MOD_MASK_SHIFT) || (oneshot_mod_state & MOD_MASK_SHIFT)) {
             bool processed = false;
             bool nl        = false;
 
             switch (keycode) {
-                case KC_LEFT_PAREN:
-                case KC_RIGHT_PAREN:
-                    // todo: this doesn't work
-                    process_shifted_sequence("();");
+                case KC_LSPO:
+                case KC_RSPC:
+                    clear_all_mods();
+                    SEND_STRING("();");
                     restore_non_shift_mods();
                     return false;
                 case KC_LEFT_CURLY_BRACE:
