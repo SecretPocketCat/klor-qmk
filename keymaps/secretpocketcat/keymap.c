@@ -131,20 +131,6 @@ const uint32_t PROGMEM unicode_map[] = {
     [SYM_DEGREE] = 0x0B0,
 };
 
-enum hid_data_types {
-    HID_LAYER = 1,
-    HID_CAPSWORD,
-    HID_CAPSLOCK,
-    HID_SHIFT,
-};
-
-void send_hid_data(uint8_t type, uint8_t value) {
-#ifdef RAW_ENABLE
-    uint8_t data[32] = {type, value};
-    raw_hid_send(data, sizeof(data));
-#endif
-}
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_COLEMAK] = LAYOUT_polydactyl(
         // top L
@@ -191,7 +177,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // mid L
-        KC_PIPE, KC_0, KC_1, KC_2, KC_3, KC_EXCLAIM,
+        XXXXXXX, KC_0, KC_1, KC_2, KC_3, KC_EXCLAIM,
         // mid R
         XXXXXXX, KC_PLUS, KC_SLASH, KC_ASTERISK, KC_MINUS, LAYER_LOCK,
         // bottom L
@@ -205,19 +191,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_SYM] = LAYOUT_polydactyl(
         // top L
-        KC_PERC, KC_CIRCUMFLEX /* ^ */, KC_QUOTE, XP(CURR_USD, CURR_EUR) /* $/€ */, KC_TILDE,
+        KC_PERC, KC_CIRCUMFLEX /* ^ */, KC_HASH, XP(CURR_USD, CURR_EUR) /* $/€ */, KC_TILDE,
         // top R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // mid L
-        X(SYM_DEGREE), KC_Q, KC_X, KC_DOUBLE_QUOTE, KC_AMPERSAND /* & */, KC_BACKSLASH,
+        KC_BACKSLASH, KC_Q, KC_X, KC_LEFT_CURLY_BRACE, KC_LEFT_BRACKET, KC_PIPE,
         // mid R
-        XXXXXXX, KC_LEFT_BRACKET, KC_LEFT_CURLY_BRACE, KC_UNDERSCORE, KC_SEMICOLON, LAYER_LOCK,
+        XXXXXXX, KC_COLON, KC_AMPERSAND /* & */, KC_UNDERSCORE, KC_SEMICOLON, LAYER_LOCK,
         // bottom L
-        XXXXXXX, XXXXXXX, KC_AT, KC_GRAVE, KC_HASH, XXXXXXX, XXXXXXX,
+        XXXXXXX, X(SYM_DEGREE), KC_AT, KC_RIGHT_CURLY_BRACE, KC_RIGHT_BRACKET, XXXXXXX, XXXXXXX,
         // bottom R
         XXXXXXX, XXXXXXX, KC_RGUI, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX,
         // thumb L
-        KC_RIGHT_BRACKET, KC_COLON, KC_RIGHT_CURLY_BRACE, XXXXXXX,
+        KC_QUOTE, KC_DOUBLE_QUOTE, KC_GRAVE /* ` */, XXXXXXX,
         // thumb R
         XXXXXXX, XXXXXXX, XXXXXXX, MO(_SYM)),
 
@@ -281,6 +267,23 @@ char o_text[24] = "";
 
 void keyboard_post_init_user(void) {}
 
+uint8_t mod_state;
+uint8_t oneshot_mod_state;
+
+bool process_shifted_sequence(char sequence[]) {
+    clear_mods();
+    clear_oneshot_mods();
+
+    send_string(sequence);
+    return true;
+}
+
+void restore_non_shift_mods(void) {
+    set_mods(mod_state);
+    set_oneshot_mods(oneshot_mod_state);
+    del_oneshot_mods(MOD_MASK_SHIFT);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_layer_lock(keycode, record, LAYER_LOCK)) {
         return false;
@@ -314,6 +317,59 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     //     return false;
             }
         }
+
+        mod_state         = get_mods();
+        oneshot_mod_state = get_oneshot_mods();
+
+        if ((mod_state & MOD_MASK_SHIFT) || (oneshot_mod_state & MOD_MASK_SHIFT)) {
+            bool processed = false;
+            bool nl        = false;
+
+            switch (keycode) {
+                case KC_LEFT_PAREN:
+                case KC_RIGHT_PAREN:
+                    // todo: this doesn't work
+                    process_shifted_sequence("();");
+                    restore_non_shift_mods();
+                    return false;
+                case KC_LEFT_CURLY_BRACE:
+                    processed = process_shifted_sequence("{}");
+                    break;
+                case KC_RIGHT_CURLY_BRACE:
+                    processed = nl = process_shifted_sequence("{}");
+                    break;
+                case KC_LEFT_BRACKET:
+                    processed = process_shifted_sequence("[]");
+                    break;
+                case KC_RIGHT_BRACKET:
+                    processed = nl = process_shifted_sequence("[]");
+                    break;
+                case KC_LEFT_ANGLE_BRACKET:
+                    processed = process_shifted_sequence("<>");
+                    break;
+                case KC_QUOTE:
+                    processed = process_shifted_sequence("''");
+                    break;
+                case KC_DOUBLE_QUOTE:
+                    processed = process_shifted_sequence("\"\"");
+                    break;
+                case KC_GRAVE:
+                    processed = process_shifted_sequence("``");
+                    break;
+            }
+
+            if (processed) {
+                tap_code(KC_LEFT);
+
+                if (nl) {
+                    tap_code(KC_ENTER);
+                }
+
+                restore_non_shift_mods();
+
+                return false;
+            }
+        }
     }
 
     return true;
@@ -323,7 +379,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void caps_word_set_user(bool active) {
     // caps_word = active;
     uprintf("capsword_%d\n", active);
-    send_hid_data(HID_CAPSWORD, active);
+    if (active) {
+        tap_code16(C(KC_F21));
+    } else {
+        tap_code16(S(KC_F21));
+    }
     // todo: disable capslock if capsword is active
 }
 
@@ -331,7 +391,11 @@ void oneshot_mods_changed_user(uint8_t mods) {
     static bool oneshot_shift = false;
     bool        shift         = mods & MOD_MASK_SHIFT;
     if (shift != oneshot_shift) {
-        send_hid_data(HID_SHIFT, shift);
+        if (shift) {
+            tap_code16(C(KC_F22));
+        } else {
+            tap_code16(S(KC_F22));
+        }
         println("Oneshot SHIFT");
     }
 }
@@ -426,10 +490,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         strcpy(layer_state_str, "XXXXXX");
     }
 
-    send_hid_data(HID_LAYER, layer);
     uprintf("layer_%d\n", layer);
 
-    tap_code16(KC_F13 + layer);
+    register_code(KC_LCTRL);
+    tap_code(KC_F13 + layer);
+    unregister_code(KC_LCTRL);
 
     return state;
 }
