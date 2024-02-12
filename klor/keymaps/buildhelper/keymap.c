@@ -13,14 +13,43 @@
                                         █         █    █▄▄▄▄▄▄▄▄    ▀▀▀▄▄▄▄▄▄▀▀▀        █          █
 
                                         ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-                                        D E F A U L T
+                                        ┌─┐┌─╴╷┌──┬─
+                                        │ ┐├─╴│└─┐│
+                                        └─┘└─╴╵╶─┘╵
 */
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include <string.h>
-#if HAPTIC_ENABLE
-  #include "drivers/haptic/DRV2605L.h"
+#include "klor.h"
+#ifdef HAPTIC_ENABLE
+#include "drivers/haptic/DRV2605L.h"
 #endif //HAPTIC ENABLE
+
+
+// ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+// │ D E F I N I T I O N S                                                                                                                      │
+// └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+// ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
+
+// ┌───────────────────────────────────────────────────────────┐
+// │ d e f i n e   l a y e r s                                 │
+// └───────────────────────────────────────────────────────────┘ 
+
+enum klor_layers {
+    _BASE
+};
+
+// ┌───────────────────────────────────────────────────────────┐
+// │ d e f i n e   s o u n d s                                 │
+// └───────────────────────────────────────────────────────────┘
+
+#ifdef AUDIO_ENABLE
+  #define WINXP_SOUND W__NOTE(_DS6), Q__NOTE(_DS5), H__NOTE(_AS5), H__NOTE(_GS5), H__NOTE(_DS5), H__NOTE(_DS6), H__NOTE(_AS5)
+  #define MAC_SOUND S__NOTE(_CS5), B__NOTE(_C5)
+ 
+  float winxp_song[][2] = SONG(WINXP_SOUND);
+  float mac_song[][2] = SONG(MAC_SOUND);
+#endif // AUDIO_ENABLE
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ K E Y M A P S                                                                                                                              │
@@ -31,86 +60,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /*
    ┌───────────────────────────────────────────────────────────┐
-   │ q w e r t y                                               │
+   │ b a s e                                                   │
    └───────────────────────────────────────────────────────────┘
              ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │    Q    │    W    │    E    │    R    │    T    │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │    Y    │    U    │    I    │    O    │    P    │   
+             │    1    │    2    │    3    │    4    │    5    │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │    L    │    M    │    N    │    O    │    P    │   
    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │   TAB   │    A    │    S    │    D    │    F    │    G    ├─╯                ╰─┤    H    │    J    │    K    │    L    │    ;    │    "    │
+   │    6    │    7    │    8    │    9    │    0    │    A    ├─╯                ╰─┤    Q    │    R    │    S    │    T    │    U    │    V    │
    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │   DEL   │    Z    │    X    │    C    │    V    │    B    ││  MUTE  ││PLY/PSE ││    N    │    M    │    ,    │    .    │    /    │  SHIFT  │
+   │    B    │    C    │    D    │    E    │    F    │    G    ││   (    ││    )   ││    W    │    X    │    Y    │    Z    │    ,    │    -    │
    └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │  CTRL   │  _____  │  SPACE  │   ALT   ││ CMD/WIN │  ENTER  │  _____  │ BSPACE  │  
+                                 │    H    │    I    │    J    │    K    ││    /    │    \    │    ;    │    +    │  
                                  └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */ 
 
-   [0] = LAYOUT(
+   [_BASE] = LAYOUT_polydactyl(
  //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,  
-    KC_TAB,   KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                          KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-    KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
-                                  KC_ESC,   KC_TAB,   KC_ENT,   KC_LALT,   KC_LGUI,  KC_SPC,   KC_BSPC,  KC_DEL
- ),
-
- [1] = LAYOUT(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,  
-    KC_TAB,   KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                          KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-    KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
-                                  KC_ESC,   KC_TAB,   KC_ENT,   KC_LALT,   KC_LGUI,  KC_SPC,   KC_BSPC,  KC_DEL
- ),
-
- [2] = LAYOUT(
-  //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,  
-    KC_TAB,   KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                          KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-    KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
-                                  KC_ESC,   KC_TAB,   KC_ENT,   KC_LALT,   KC_LGUI,  KC_SPC,   KC_BSPC,  KC_DEL
- ),
-
- [3] = LAYOUT(
-  //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                          KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,  
-    KC_TAB,   KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                          KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-    KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_MUTE,   KC_MPLY,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
-                                  KC_ESC,   KC_TAB,   KC_ENT,   KC_LALT,   KC_LGUI,  KC_SPC,   KC_BSPC,  KC_DEL
- ),
-
- /*
-   ╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
-   
-   ┌───────────────────────────────────────────────────────────┐
-   │ t e m p l a t e                                           │
-   └───────────────────────────────────────────────────────────┘
-             ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │         │         │         │         │         │ ╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮╭╮ │         │         │         │         │         │   
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤ │╰╯╰╯╰╯╰╯╰╯╰╯╰╯╰╯│ ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │         │         │         │         ├─╯                ╰─┤         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         ││        ││        ││         │         │         │         │         │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │         │         │         │         ││         │         │         │         │  
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ 
-
-   [_TEMPLATE] = LAYOUT(
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,                       _______,  _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,  _______,
-                                  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______
- )*/ 
+              KC_1,     KC_2,     KC_3,     KC_4,     KC_5,                          KC_L,     KC_W,     KC_N,     KC_O,     KC_P,  
+    KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_A,                          KC_Q,     KC_R,     KC_S,     KC_T,     KC_U,     KC_V,
+    KC_B,     KC_C,     KC_D,     KC_E,     KC_F,     KC_G,     KC_LBRC,   KC_RBRC,  KC_W,     KC_X,     KC_Y,     KC_Z,     KC_COMM,  KC_MINS,
+                                  KC_H,     KC_I,     KC_J,     KC_K,      KC_SLSH,  KC_BSLS,  KC_SCLN,  KC_PPLS
+ )
 };
 
-#ifdef ENCODER_MAP_ENABLE
+// ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+// │ H A P T I C   F E E D B A C K                                                                                                              │
+// └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+// ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
 
-  const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-      [0] =   { ENCODER_CCW_CW(KC_MS_WH_UP, KC_MS_WH_DOWN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)  },
-      [1] =   { ENCODER_CCW_CW(RGB_HUD, RGB_HUI),           ENCODER_CCW_CW(RGB_SAD, RGB_SAI)  },
-      [2] =   { ENCODER_CCW_CW(RGB_VAD, RGB_VAI),           ENCODER_CCW_CW(RGB_SPD, RGB_SPI)  },
-      [3] =   { ENCODER_CCW_CW(RGB_RMOD, RGB_MOD),          ENCODER_CCW_CW(KC_RIGHT, KC_LEFT) },
-      //                  Encoder 1                                     Encoder 2
-  };
+void keyboard_post_init_user(void) {
+  #if RGB_MATRIX_ENABLE
+    rgblight_enable_noeeprom();
+    rgblight_sethsv_noeeprom(35, 255, 255); // set default RGB color to yellow
+  #endif //RGB_MATRIX_ENABLE
+}
 
-#endif
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ O L E D                                                                                                                                    │
@@ -119,149 +101,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifdef OLED_ENABLE
 
-char layer_state_str[24];
-char o_text[24] = "";
-
-// ┌───────────────────────────────────────────────────────────┐
-// │ o l e d   g r a p h i c s                                 │
-// └───────────────────────────────────────────────────────────┘
-
-void render_os_lock_status(void) {
-    static const char PROGMEM sep_v[] = {0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0};
-    static const char PROGMEM sep_h1[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
-    static const char PROGMEM sep_h2[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
-    static const char PROGMEM face_1[] = {0x80, 0x81, 0x82, 0x83, 0x84, 0xE1, 0};  
-    static const char PROGMEM face_2[] = {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xE1, 0}; 
-    static const char PROGMEM os_m_1[] = {0x95, 0x96, 0};
-    static const char PROGMEM os_m_2[] = {0xB5, 0xB6, 0};
-    static const char PROGMEM os_w_1[] = {0x97, 0x98, 0};
-    static const char PROGMEM os_w_2[] = {0xB7, 0xB8, 0};
-    static const char PROGMEM s_lock[] = {0x8F, 0x90, 0};
-    static const char PROGMEM n_lock[] = {0x91, 0x92, 0};
-    static const char PROGMEM c_lock[] = {0x93, 0x94, 0};
-    static const char PROGMEM b_lock[] = {0xE1, 0xE1, 0};
-    #ifdef AUDIO_ENABLE  
-      static const char PROGMEM aud_en[] = {0xAF, 0xB0, 0};
-      static const char PROGMEM aud_di[] = {0xCF, 0xD0, 0};
-    #endif
-    #ifdef HAPTIC_ENABLE
-      static const char PROGMEM hap_en[] = {0xB1, 0xB2, 0};
-    #endif
-
-// os mode status ────────────────────────────────────────┐
-
-    oled_write_ln_P(sep_v, false);
-
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_P(os_m_1, false); // ──── MAC
-    } else {
-        oled_write_P(os_w_1, false); // ──── WIN
-    }
-
-    oled_write_P(sep_h1, false);
-    oled_write_P(face_1, false);
-
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_P(os_m_2, false); // ──── MAC
-    } else {
-        oled_write_P(os_w_2, false); // ──── WIN
-    }
-
-    oled_write_P(sep_h1, false);
-    oled_write_P(face_2, false);
-    oled_write_ln_P(sep_v, false);
-
-    
-// lock key layer status ─────────────────────────────────┐
-
-    led_t led_usb_state = host_keyboard_led_state();
-
-    if (led_usb_state.num_lock) {
-        oled_write_P(n_lock, false); // ──── NUMLOCK
-    } else {
-        oled_write_P(b_lock, false);
-    }
-    if (led_usb_state.caps_lock) {
-        oled_write_P(c_lock, false); // ─── CAPSLOCK
-    } else {
-        oled_write_P(b_lock, false);
-    }
-    if (led_usb_state.scroll_lock) { // ─ SCROLLLOCK
-        oled_write_P(s_lock, false);
-    } else {
-        oled_write_P(b_lock, false);
-    }
-
-// hardware feature status ──────────────────────────────┐
-
-    oled_write_P(sep_h2, false);
-
-    #ifndef AUDIO_ENABLE 
-        oled_write_P(b_lock, false);
-    #endif
-    #ifndef HAPTIC_ENABLE 
-        oled_write_P(b_lock, false);
-    #endif
-
-    #ifdef AUDIO_ENABLE // ────────────────── AUDIO
-        if (is_audio_on()) { 
-          oled_write_P(aud_en, false); 
-        } else {
-          oled_write_P(aud_di, false);
-        }
-    #endif // AUDIO ENABLE
-
-     #ifdef HAPTIC_ENABLE // ─────────────── HAPTIC
-        oled_write_P(hap_en, false); 
-     #endif // HAPTIC ENABLE
-}
-
-
-// layer status ──────────────────────────────────────────┐
-
-int layerstate = 0;
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-      switch (get_highest_layer(state)) {
-            case 0:
-                strcpy ( layer_state_str, "BASE QWERTY");
-                break;
-            case 1:
-                strcpy ( layer_state_str, "BASE COLEMAK");
-                break;
-            case 2:
-                strcpy ( layer_state_str, "LOWER");
-                break;
-            case 3:
-                strcpy ( layer_state_str, "RAISE");
-                break;
-            case 4:
-                strcpy ( layer_state_str, "ADJUST");
-                break;
-            default:
-                strcpy ( layer_state_str, "XXXXXX");
-      }
-
-  return state;
-}
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ w r i t e   t o   o l e d                                 │
 // └───────────────────────────────────────────────────────────┘
 
 bool oled_task_kb(void) {
-    if (!oled_task_user()) {
-        return false;
-    }
-    if (is_keyboard_master()) {  // ────────────────────────── PRIMARY SIDE
-
-        // layer status ──────────────────────────────────────────────────┐
-        oled_write_ln(o_text, false);
-        render_os_lock_status();
-
-    } else {  // ─────────────────────────────────────────── SECONDARY SIDE
-
-        // KLOR face ─────────────────────────────────────────────────────┐
+    // KLOR face ─────────────────────────────────────────────────────┐
 
         static const char PROGMEM klor_face[] = {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -298,7 +144,62 @@ bool oled_task_kb(void) {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
         oled_write_raw_P(klor_face, sizeof(klor_face));
+}
+#endif // OLED_ENABLE
+
+
+// ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+// │ E N C O D E R                                                                                                                              │
+// └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+// ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
+
+#ifdef ENCODER_ENABLE
+
+// ┌───────────────────────────────────────────────────────────┐
+// │ e n c o d e r  L                                          │
+// └───────────────────────────────────────────────────────────┘ 
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
+        if (clockwise) {
+            tap_code_delay(KC_VOLU, 10);
+        } else {
+            tap_code_delay(KC_VOLD, 10);
+        }
+    } else if (index == 1) { /* Second encoder */
+        if (clockwise) {
+            rgb_matrix_increase_hue();
+        } else {
+            rgb_matrix_decrease_hue();
+        }
     }
     return false;
 }
-#endif // OLED_ENABLE
+
+#endif // ENCODER_ENABLE
+
+
+
+
+/*
+
+                                                       ▐█    ▟▛ ▐█     ▄▆▀▀▀▀▀▀▆▄  ▐█▀▀▀▀▀█▌
+                                                       ▐█   ▟▛  ▐█    ▟▛        ▜▙ ▐█     █▌
+                                                       ▐█  ▟▛   ▐█   ▐█          █▋▐█     █▌
+                                                       ▐█ ▟█▙   ▐█   ▐█          █▋▐█▀▀▜█▀▀▘
+                                                       ▐█▟▛ ▜▙  ▐█    ▜▙        ▟▛ ▐█   ▜▙
+                                                       ▐█▛   ▜▙ ▐█▄▄▄▄ ▀▜▆▄▄▄▄▆▛▀  ▐█    ▜▙
+
+                                                                 ▄██████████████▄
+                                                                 ████████████████
+                                                            ▄██████▀  ▀████▀  ▀██████▄
+                                                            ███████▄  ▄████▄  ▄███████
+                                                            ███████████▀▀▀▀███████████
+                                                            ▀█████████▀ ▄▄ ▀█████████▀
+                                                                 ████▀ ▄██▄ ▀████
+                                                                 ████▄▄████▄▄████
+
+*/
+
+
+
