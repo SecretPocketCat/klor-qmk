@@ -6,6 +6,7 @@
 #include "raw_hid.h"
 #include "virtser.h"
 #include "features/layer_lock.h"
+#include "os_detection.h"
 
 enum klor_layers {
     _COLEMAK,
@@ -264,8 +265,10 @@ char layer_state_str[24];
 char o_text[24] = "";
 
 void keyboard_post_init_user(void) {
-    // todo: set unicode mode some time after/during startup - maybe here?
-    // set_unicode_input_mode
+    // use OS detection (a guess based on some USB wizadry) to set unicode input mode
+    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
+    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
+    set_unicode_input_mode(detected_host_os());
 }
 
 uint8_t mod_state;
