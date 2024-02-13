@@ -263,7 +263,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 char layer_state_str[24];
 char o_text[24] = "";
 
-void keyboard_post_init_user(void) {}
+void keyboard_post_init_user(void) {
+    // todo: set unicode mode some time after/during startup - maybe here?
+    // set_unicode_input_mode
+}
 
 uint8_t mod_state;
 uint8_t oneshot_mod_state;
@@ -416,105 +419,4 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 
     return TAPPING_TERM;
-}
-
-// OLED graphics
-void render_os_lock_status(void) {
-    static const char PROGMEM sep_v[]  = {0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0};
-    static const char PROGMEM sep_h1[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
-    static const char PROGMEM sep_h2[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
-    static const char PROGMEM s_lock[] = {0x8F, 0x90, 0};
-    static const char PROGMEM n_lock[] = {0x91, 0x92, 0};
-    static const char PROGMEM c_lock[] = {0x93, 0x94, 0};
-    static const char PROGMEM b_lock[] = {0xE1, 0xE1, 0};
-
-    // os mode status ────────────────────────────────────────┐
-
-    oled_write_ln_P(sep_v, false);
-
-    oled_write_P(sep_h1, false);
-
-    oled_write_P(sep_h1, false);
-    oled_write_ln_P(sep_v, false);
-
-    // lock key layer status ─────────────────────────────────┐
-
-    led_t led_usb_state = host_keyboard_led_state();
-
-    if (led_usb_state.num_lock) {
-        oled_write_P(n_lock, false); // ──── NUMLOCK
-    } else {
-        oled_write_P(b_lock, false);
-    }
-    if (led_usb_state.caps_lock || is_caps_word_on()) {
-        oled_write_P(c_lock, false); // ─── CAPSLOCK
-    } else {
-        oled_write_P(b_lock, false);
-    }
-    if (led_usb_state.scroll_lock) { // ─ SCROLLLOCK
-        oled_write_P(s_lock, false);
-    } else {
-        oled_write_P(b_lock, false);
-    }
-    // todo: caps word
-
-    // hardware feature status ──────────────────────────────┐
-
-    oled_write_P(sep_h2, false);
-}
-
-// layer status ──────────────────────────────────────────┐
-layer_state_t layer_state_set_user(layer_state_t state) {
-    int16_t layer = get_highest_layer(state);
-
-    if (IS_LAYER_ON_STATE(state, _NAV)) {
-        strcpy(layer_state_str, "NAV=>");
-    } else if (IS_LAYER_ON_STATE(state, _NUM)) {
-        strcpy(layer_state_str, "NUM++");
-    } else if (IS_LAYER_ON_STATE(state, _SYM)) {
-        strcpy(layer_state_str, "SYM");
-    } else if (IS_LAYER_ON_STATE(state, _FUN)) {
-        strcpy(layer_state_str, "FUN + MOUSE");
-    } else if (IS_LAYER_ON_STATE(state, _WIN)) {
-        strcpy(layer_state_str, "WIN + MEDIA");
-    } else if (IS_LAYER_ON_STATE(state, _UNI)) {
-        strcpy(layer_state_str, "UNICODE");
-    } else if (IS_LAYER_ON_STATE(state, _COLEMAK)) {
-        strcpy(layer_state_str, "BASE COLEMAK");
-    } else if (IS_LAYER_ON_STATE(state, _QWERTY)) {
-        strcpy(layer_state_str, "BASE QWERTY");
-    } else {
-        strcpy(layer_state_str, "XXXXXX");
-    }
-
-    uprintf("layer_%d\n", layer);
-
-    register_code(KC_LCTL);
-    tap_code(KC_F13 + layer);
-    unregister_code(KC_LCTL);
-
-    return state;
-}
-
-// Write to OLED
-bool oled_task_kb(void) {
-    if (!oled_task_user()) {
-        return false;
-    }
-
-    // layer status ──────────────────────────────────────────────────┐
-    oled_write_ln(o_text, false);
-    render_os_lock_status();
-
-    // if (is_keyboard_master()) { // ────────────────────────── PRIMARY SIDE
-
-    //     // layer status ──────────────────────────────────────────────────┐
-    //     oled_write_ln(o_text, false);
-    //     render_os_lock_status();
-    // } else {
-    //     // Slave side
-    //     // todo: ???
-    //     // oled_write_raw_P(klor_face, sizeof(klor_face));
-    // }
-    return false;
 }
