@@ -1,5 +1,5 @@
 OLED_ENABLE = yes
-OLED_DRIVER = SSD1306
+OLED_DRIVER_ENABLE = yes
 
 ENCODER_ENABLE = no
 
@@ -22,7 +22,7 @@ UNICODEMAP_ENABLE = yes
 CAPS_WORD_ENABLE = yes
 
 # Mouse
-MOUSEKEY_ENABLE = yes
+MOUSEKEY_ENABLE = no
 
 # Space cadet
 SPACE_CADET_ENABLE = yes
@@ -32,10 +32,12 @@ COMMAND_ENABLE = no
 AUTO_SHIFT_ENABLE = no
 
 #HID/Virtual Serial
-CONSOLE_ENABLE = yes
-RAW_ENABLE = yes
+CONSOLE_ENABLE = no
+RAW_ENABLE = no
 VIRTSER_ENABLE = no
+
+# OS detection
+OS_DETECTION_ENABLE = yes
 
 #Extras
 SRC += features/layer_lock.c
-SRC += features/select_word.c

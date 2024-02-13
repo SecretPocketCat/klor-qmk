@@ -6,7 +6,6 @@
 #include "raw_hid.h"
 #include "virtser.h"
 #include "features/layer_lock.h"
-#include "features/select_word.h"
 
 enum klor_layers {
     _COLEMAK,
@@ -24,7 +23,6 @@ enum custom_keycodes {
     QWERTY,
     _MT_QUESTIONMARK,
     LAYER_LOCK,
-    SELECT_WORD,
     SELECT_LINE,
 };
 
@@ -142,9 +140,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid R
         KC_H, KC_N, KC_E, KC_I, KC_O, KC_K,
         // bottom L
-        XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_COMMA), KC_LSPO, KC_V, XXXXXXX, XXXXXXX,
+        XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_COMMA), SC_LSPO, KC_V, XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, KC_M, KC_RSPC, MT(MOD_LCTL, KC_DOT), MT_ALT_QUESTIONMARK, XXXXXXX,
+        XXXXXXX, XXXXXXX, KC_M, SC_RSPC, MT(MOD_LCTL, KC_DOT), MT_ALT_QUESTIONMARK, XXXXXXX,
         // thumb L
         LT(_WIN, KC_ESC), LT(_NAV, KC_SPC), LT(_UNI, KC_TAB), XXXXXXX,
         // thumb R
@@ -161,11 +159,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid L
         LAYER_LOCK, LCTL(KC_Z), LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Y),
         // mid R
-        MEH(KC_F1) /* TODO: fluent search */, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, CAPS_WORD,
+        XXXXXXX /* TODO: */, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, QK_CAPS_WORD_TOGGLE,
         // bottom L
         XXXXXXX, OSM(MOD_LALT), OSM(MOD_LCTL), OSM(MOD_LSFT), OSM(MOD_LGUI), XXXXXXX, XXXXXXX,
         // bottom R - TODO: TILING WIN MANAGMENT? MOUSE ARROWS?
-        XXXXXXX, XXXXXXX, SELECT_WORD, SELECT_LINE, XXXXXXX, KC_CAPS_LOCK, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS_LOCK, XXXXXXX,
         // thumb L
         XXXXXXX, MO(_NAV), XXXXXXX, XXXXXXX,
         // thumb R
@@ -292,10 +290,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    if (!process_select_word_or_line(keycode, record, SELECT_WORD, SELECT_LINE)) {
-        return false;
-    }
-
     mod_state         = get_mods();
     oneshot_mod_state = get_oneshot_mods();
 
@@ -329,8 +323,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             bool nl        = false;
 
             switch (keycode) {
-                case KC_LSPO:
-                case KC_RSPC:
+                case SC_LSPO:
+                case SC_RSPC:
                     clear_all_mods();
                     SEND_STRING("();");
                     restore_non_shift_mods();
@@ -495,16 +489,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     uprintf("layer_%d\n", layer);
 
-    register_code(KC_LCTRL);
+    register_code(KC_LCTL);
     tap_code(KC_F13 + layer);
-    unregister_code(KC_LCTRL);
+    unregister_code(KC_LCTL);
 
     return state;
-}
-
-// OLED rotation
-oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
-    return OLED_ROTATION_180;
 }
 
 // Write to OLED
