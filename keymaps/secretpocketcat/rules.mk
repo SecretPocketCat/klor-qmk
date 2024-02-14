@@ -1,5 +1,5 @@
 # Bootloader selection
-BOOTLOADER = atmel-dfu
+BOOTLOADER = caterina
 
 OLED_ENABLE = yes
 OLED_DRIVER_ENABLE = yes
