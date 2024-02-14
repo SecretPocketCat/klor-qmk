@@ -164,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // bottom L
         XXXXXXX, OSM(MOD_LALT), OSM(MOD_LCTL), OSM(MOD_LSFT), OSM(MOD_LGUI), XXXXXXX, XXXXXXX,
         // bottom R - TODO: TILING WIN MANAGMENT? MOUSE ARROWS?
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS_LOCK, XXXXXXX,
+        XXXXXXX, XXXXXXX, LGUI(KC_KP_5), LGUI(KC_KP_6), LGUI(KC_KP_7), KC_CAPS_LOCK, XXXXXXX,
         // thumb L
         XXXXXXX, MO(_NAV), XXXXXXX, XXXXXXX,
         // thumb R
@@ -206,9 +206,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // thumb R
         XXXXXXX, XXXXXXX, XXXXXXX, MO(_SYM)),
 
+    // todo: replace the mouse keys with smt useful - maybe media?
     [_FUN] = LAYOUT_polydactyl(
         // top L
-        KC_F10, KC_F7, KC_F8, KC_F9, KC_MS_WH_UP,
+        KC_F10, KC_F7, KC_F8, KC_F9, XXXXXXX,
         // top R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // mid L
@@ -224,6 +225,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // thumb R
         XXXXXXX, MO(_FUN), XXXXXXX, XXXXXXX),
 
+    // todo: replace smt. with the :p emoji
     [_UNI] = LAYOUT_polydactyl(
         // top L
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -246,15 +248,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top L
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // top R
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, LGUI(KC_F13), LGUI(KC_F14), LGUI(KC_F15), LGUI(KC_F16),
         // mid L
-        LAYER_LOCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, LCTL(KC_F24),
+        XXXXXXX, LGUI(KC_KP_1), LGUI(KC_KP_2), LGUI(KC_KP_3), LGUI(KC_KP_4), XXXXXXX,
         // mid R
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        // todo: use alt-tab actually
+        LGUI(KC_F17), LALT(KC_TAB) /* ALT + TAB */, LGUI(KC_F18), LGUI(KC_F19), LSA(KC_TAB) /* ALT + Shift + TAB */, LGUI(KC_F20),
         // bottom L
         XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, LGUI(KC_F21), LGUI(KC_F22), LGUI(KC_F23), LGUI(KC_F24), XXXXXXX,
         // thumb L
         MO(_WIN), XXXXXXX, XXXXXXX, XXXXXXX,
         // thumb R
