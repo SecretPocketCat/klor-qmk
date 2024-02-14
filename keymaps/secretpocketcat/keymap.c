@@ -271,7 +271,9 @@ void keyboard_post_init_user(void) {
     // use OS detection (a guess based on some USB wizadry) to set unicode input mode
     // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
     // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
-    set_unicode_input_mode(detected_host_os());
+    int host = detected_host_os();
+    set_unicode_input_mode(host);
+    uprintf("host=%d\n", host);
 }
 
 uint8_t mod_state;
