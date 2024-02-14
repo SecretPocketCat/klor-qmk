@@ -264,18 +264,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX),
 };
 
-char layer_state_str[24];
-char o_text[24] = "";
-
-void keyboard_post_init_user(void) {
-    // use OS detection (a guess based on some USB wizadry) to set unicode input mode
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
-    int host = detected_host_os();
-    set_unicode_input_mode(host);
-    uprintf("host=%d\n", host);
-}
-
 uint8_t mod_state;
 uint8_t oneshot_mod_state;
 
@@ -381,6 +369,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     return true;
+}
+
+// layer status ──────────────────────────────────────────┐
+layer_state_t layer_state_set_user(layer_state_t state) {
+    int16_t layer = get_highest_layer(state);
+    uprintf("layer_%d\n", layer);
+
+    register_code(KC_LCTL);
+    tap_code(KC_F13 + layer);
+    unregister_code(KC_LCTL);
+
+    // use OS detection (a guess based on some USB wizadry) to set unicode input mode
+    // this might not work during startup hence running it on layer switch
+    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
+    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
+    int host = detected_host_os();
+
+    if (host == 1) {
+        set_unicode_input_mode(UNICODE_MODE_LINUX);
+    } else {
+        set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
+    }
+
+    uprintf("host=%d\n", host);
+
+    return state;
 }
 
 // todo: update oled with caps word
