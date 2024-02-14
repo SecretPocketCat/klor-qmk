@@ -69,7 +69,7 @@ enum unicode_names {
     EMJ_GRIN_SWEAT,
     EMJ_SAD,
     EMJ_TEARS,
-    EMJ_SMILING_HEARTS,
+    EMJ_TONGUE,
     EMJ_BLOW_KISS,
     EMJ_NAUSEA,
     EMJ_VOMIT,
@@ -114,18 +114,18 @@ const uint32_t PROGMEM unicode_map[] = {
     [CURR_USD] = 0x0024,
     [CURR_EUR] = 0x20AC,
     // Emoji
-    [EMJ_SMILE]          = 0x1F642,
-    [EMJ_TEARS_OF_JOY]   = 0x1F602,
-    [EMJ_GRIN]           = 0x1F601,
-    [EMJ_GRIN_SWEAT]     = 0x1F605,
-    [EMJ_SAD]            = 0x1F641,
-    [EMJ_TEARS]          = 0x1F62D,
-    [EMJ_SMILING_HEARTS] = 0x1F970,
-    [EMJ_BLOW_KISS]      = 0x1F618,
-    [EMJ_NAUSEA]         = 0x1F922,
-    [EMJ_VOMIT]          = 0x1F92E,
-    [EMJ_THUMBS_UP]      = 0x1F44D,
-    [EMJ_SUS]            = 0x1F928,
+    [EMJ_SMILE]        = 0x1F642,
+    [EMJ_TEARS_OF_JOY] = 0x1F602,
+    [EMJ_GRIN]         = 0x1F601,
+    [EMJ_GRIN_SWEAT]   = 0x1F605,
+    [EMJ_SAD]          = 0x1F641,
+    [EMJ_TEARS]        = 0x1F62D,
+    [EMJ_TONGUE]       = 0x1F61B,
+    [EMJ_BLOW_KISS]    = 0x1F618,
+    [EMJ_NAUSEA]       = 0x1F922,
+    [EMJ_VOMIT]        = 0x1F92E,
+    [EMJ_THUMBS_UP]    = 0x1F44D,
+    [EMJ_SUS]          = 0x1F928,
     // Symbols
     [SYM_DEGREE] = 0x0B0,
 };
@@ -238,7 +238,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // bottom L
         XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, XP(EMJ_SMILING_HEARTS, EMJ_BLOW_KISS), KC_RSFT, XP(EMJ_VOMIT, EMJ_NAUSEA), XP(EMJ_THUMBS_UP, EMJ_SUS), XXXXXXX,
+        XXXXXXX, XXXXXXX, XP(EMJ_TONGUE, EMJ_BLOW_KISS), KC_RSFT, XP(EMJ_VOMIT, EMJ_NAUSEA), XP(EMJ_THUMBS_UP, EMJ_SUS), XXXXXXX,
         // thumb L
         XXXXXXX, XXXXXXX, MO(_UNI), XXXXXXX,
         // thumb R
