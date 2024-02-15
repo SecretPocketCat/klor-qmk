@@ -373,13 +373,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // layer status ──────────────────────────────────────────┐
 layer_state_t layer_state_set_user(layer_state_t state) {
-    int16_t layer = get_highest_layer(state);
-    uprintf("layer_%d\n", layer);
-
-    register_code(KC_LCTL);
-    tap_code(KC_F13 + layer);
-    unregister_code(KC_LCTL);
-
     // use OS detection (a guess based on some USB wizadry) to set unicode input mode
     // this might not work during startup hence running it on layer switch
     // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
