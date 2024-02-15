@@ -293,16 +293,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     oneshot_mod_state = get_oneshot_mods();
 
     if (record->event.pressed) {
-        // switch (keycode) {
-        //     // Layer
-        //     case COLEMAK:
-        //         set_single_persistent_default_layer(_COLEMAK);
-        //         return false;
-        //     case QWERTY:
-        //         set_single_persistent_default_layer(_QWERTY);
-        //         return false;
-        // }
-
         // tap overrides
         if (record->tap.count > 0) {
             // do not continue with default tap action
@@ -389,31 +379,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     uprintf("host=%d\n", host);
 
     return state;
-}
-
-// todo: update oled with caps word
-void caps_word_set_user(bool active) {
-    // caps_word = active;
-    uprintf("capsword_%d\n", active);
-    if (active) {
-        tap_code16(C(KC_F21));
-    } else {
-        tap_code16(S(KC_F21));
-    }
-    // todo: disable capslock if capsword is active
-}
-
-void oneshot_mods_changed_user(uint8_t mods) {
-    static bool oneshot_shift = false;
-    bool        shift         = mods & MOD_MASK_SHIFT;
-    if (shift != oneshot_shift) {
-        if (shift) {
-            tap_code16(C(KC_F22));
-        } else {
-            tap_code16(S(KC_F22));
-        }
-        println("Oneshot SHIFT");
-    }
 }
 
 bool is_timed_out_tap_key(uint16_t keycode, keyrecord_t *record) {
