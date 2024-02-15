@@ -386,10 +386,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
     int host = detected_host_os();
 
-    if (host == 1) {
-        set_unicode_input_mode(UNICODE_MODE_LINUX);
-    } else {
+    // check for Windows, but fallback to linux in all other cases
+    if (host == OS_WINDOWS) {
         set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
+    } else {
+        set_unicode_input_mode(UNICODE_MODE_LINUX);
     }
 
     uprintf("host=%d\n", host);
