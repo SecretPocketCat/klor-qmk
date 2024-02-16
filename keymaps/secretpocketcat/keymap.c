@@ -5,7 +5,6 @@
 #include "klor.h"
 #include "raw_hid.h"
 #include "virtser.h"
-#include "features/layer_lock.h"
 #include "os_detection.h"
 
 enum klor_layers {
@@ -23,7 +22,6 @@ enum custom_keycodes {
     COLEMAK = SAFE_RANGE,
     QWERTY,
     _MT_QUESTIONMARK,
-    LAYER_LOCK,
     SELECT_LINE,
 };
 
@@ -158,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top R
         KC_APP, KC_HOME, KC_PAGE_DOWN, KC_PAGE_UP, KC_END,
         // mid L
-        LAYER_LOCK, LCTL(KC_Z), LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Y),
+        XXXXXXX, LCTL(KC_Z), LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Y),
         // mid R
         XXXXXXX /* TODO: */, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, QK_CAPS_WORD_TOGGLE,
         // bottom L
@@ -178,7 +176,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid L
         XXXXXXX, KC_0, KC_1, KC_2, KC_3, KC_EXCLAIM,
         // mid R
-        XXXXXXX, KC_PLUS, KC_SLASH, KC_ASTERISK, KC_MINUS, LAYER_LOCK,
+        XXXXXXX, KC_PLUS, KC_SLASH, KC_ASTERISK, KC_MINUS, XXXXXXX,
         // bottom L
         XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_4), KC_5, KC_6, XXXXXXX, XXXXXXX,
         // bottom R
@@ -196,7 +194,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid L
         KC_BACKSLASH, KC_Q, KC_X, KC_LEFT_CURLY_BRACE, KC_LEFT_BRACKET, KC_PIPE,
         // mid R
-        XXXXXXX, KC_COLON, KC_AMPERSAND /* & */, KC_UNDERSCORE, KC_SEMICOLON, LAYER_LOCK,
+        XXXXXXX, KC_COLON, KC_AMPERSAND /* & */, KC_UNDERSCORE, KC_SEMICOLON, XXXXXXX,
         // bottom L
         XXXXXXX, X(SYM_DEGREE), KC_AT, KC_RIGHT_CURLY_BRACE, KC_RIGHT_BRACKET, XXXXXXX, XXXXXXX,
         // bottom R
@@ -215,7 +213,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid L
         KC_PRINT_SCREEN, KC_F11, KC_F1, KC_F2, KC_F3, KC_MS_WH_DOWN,
         // mid R
-        XXXXXXX, KC_MS_LEFT, KC_MS_DOWN, KC_MS_UP, KC_MS_RIGHT, LAYER_LOCK,
+        XXXXXXX, KC_MS_LEFT, KC_MS_DOWN, KC_MS_UP, KC_MS_RIGHT, XXXXXXX,
         // bottom L
         XXXXXXX, KC_F12, KC_F4, KC_F5, KC_F6, XXXXXXX, XXXXXXX,
         // bottom R
@@ -232,7 +230,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top R
         XP(U_ACUTE, U_ACUTE_UPPER), XP(U_RING, U_RING_UPPER), XP(D_CARON, D_CARON_UPPER), XP(N_CARON, N_CARON_UPPER), XP(T_CARON, T_CARON_UPPER),
         // mid L
-        LAYER_LOCK, XP(A_ACUTE, A_ACUTE_UPPER), XP(R_CARON, R_CARON_UPPER), XP(S_CARON, S_CARON_UPPER), XP(Z_CARON, Z_CARON_UPPER), XXXXXXX,
+        XXXXXXX, XP(A_ACUTE, A_ACUTE_UPPER), XP(R_CARON, R_CARON_UPPER), XP(S_CARON, S_CARON_UPPER), XP(Z_CARON, Z_CARON_UPPER), XXXXXXX,
         // mid R
         XP(C_CARON, C_CARON_UPPER), XP(E_CARON, E_CARON_UPPER), XP(E_ACUTE, E_ACUTE_UPPER), XP(I_ACUTE, I_ACUTE_UPPER), XP(Y_ACUTE, Y_ACUTE_UPPER), XP(O_ACUTE, O_ACUTE_UPPER),
         // bottom L
@@ -285,10 +283,6 @@ void restore_non_shift_mods(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!process_layer_lock(keycode, record, LAYER_LOCK)) {
-        return false;
-    }
-
     mod_state         = get_mods();
     oneshot_mod_state = get_oneshot_mods();
 

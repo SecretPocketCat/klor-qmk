@@ -26,6 +26,3 @@ OS_DETECTION_ENABLE = yes
 CONSOLE_ENABLE = no
 RAW_ENABLE = no
 VIRTSER_ENABLE = no
-
-#Extras
-SRC += features/layer_lock.c
