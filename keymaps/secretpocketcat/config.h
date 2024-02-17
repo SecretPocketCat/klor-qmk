@@ -8,13 +8,12 @@ for more options.
 #define MASTER_LEFT
 // #define MASTER_RIGHT
 
-// #define TAPPING_TERM 170
 #define TAPPING_TERM 170
 #define TAPPING_TERM_PER_KEY
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
-#define TAPPING_FORCE_HOLD
+#define QUICK_TAP_TERM 0
 
 #undef LOCKING_SUPPORT_ENABLE
 #undef LOCKING_RESYNC_ENABLE
@@ -31,9 +30,6 @@ for more options.
 // Mouse
 #define MK_COMBINED
 // #define MK_KINETIC_SPEED 5
-
-// Layer lock
-#define LAYER_LOCK_IDLE_TIMEOUT 30000 // Turn off after 30 seconds.
 
 // Oneshot
 #undef NO_ACTION_ONESHOT
