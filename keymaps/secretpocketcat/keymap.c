@@ -7,6 +7,54 @@
 #include "virtser.h"
 #include "os_detection.h"
 
+// Init
+uint32_t alive(uint32_t trigger_time, void *cb_arg) {
+    uprintf("Alive: %2u min\n", trigger_time / 1000 / 60);
+
+    // repeat after given delay
+    return 60000;
+}
+
+uint32_t detect_host(uint32_t trigger_time, void *cb_arg) {
+    int host = detected_host_os();
+
+    // check for Windows, but fallback to linux in all other cases
+    if (host == OS_WINDOWS) {
+        set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
+    } else {
+        set_unicode_input_mode(UNICODE_MODE_LINUX);
+    }
+
+#ifdef CONSOLE_ENABLE
+    uprintf("host OS=%d\n", host);
+#endif
+
+    // don't repeat
+    return 0;
+}
+
+void keyboard_post_init_user(void) {
+#ifdef CONSOLE_ENABLE
+    defer_exec(60000, alive, NULL);
+#endif
+
+    // use OS detection (a guess based on some USB wizadry) to set unicode input mode
+    // this might not work during startup hence running it after a slight delay
+    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
+    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
+    defer_exec(3000, detect_host, NULL);
+}
+
+// Idle
+void suspend_power_down_user(void) {
+    uprintf("Idle\n");
+}
+
+void suspend_wakeup_init_user(void) {
+    uprintf("Wakeup\n");
+}
+
+// Custom keys
 enum klor_layers {
     _COLEMAK,
     _QWERTY,
@@ -283,6 +331,10 @@ void restore_non_shift_mods(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef CONSOLE_ENABLE
+    uprintf("KEY= kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+
     mod_state         = get_mods();
     oneshot_mod_state = get_oneshot_mods();
 
@@ -355,22 +407,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// layer status ──────────────────────────────────────────┐
+// layer
 layer_state_t layer_state_set_user(layer_state_t state) {
-    // use OS detection (a guess based on some USB wizadry) to set unicode input mode
-    // this might not work during startup hence running it on layer switch
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
-    int host = detected_host_os();
-
-    // check for Windows, but fallback to linux in all other cases
-    if (host == OS_WINDOWS) {
-        set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
-    } else {
-        set_unicode_input_mode(UNICODE_MODE_LINUX);
-    }
-
-    uprintf("host=%d\n", host);
+#ifdef CONSOLE_ENABLE
+    uprintf("LAYER=%2u\n", get_highest_layer(state));
+#endif
 
     return state;
 }
