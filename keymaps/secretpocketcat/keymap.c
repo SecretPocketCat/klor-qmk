@@ -271,7 +271,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // thumb R
         XXXXXXX, MO(_FUN), XXXXXXX, XXXXXXX),
 
-    // todo: replace smt. with the :p emoji
     [_UNI] = LAYOUT_polydactyl(
         // top L
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -294,9 +293,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top L
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // top R
-        XXXXXXX, LGUI(KC_F13), LGUI(KC_F14), LGUI(KC_F15), LGUI(KC_F16),
+        LGUI(KC_C), LGUI(KC_F13), LGUI(KC_F14), LGUI(KC_F15), LGUI(KC_F16),
         // mid L
-        XXXXXXX, LGUI(KC_KP_1), LGUI(KC_KP_2), LGUI(KC_KP_3), LGUI(KC_KP_4), XXXXXXX,
+        XXXXXXX, LGUI(KC_A), LGUI(KC_R), LGUI(KC_S), LGUI(KC_T), XXXXXXX,
         // mid R
         // todo: use alt-tab actually
         LGUI(KC_F17), LALT(KC_TAB) /* ALT + TAB */, LGUI(KC_F18), LGUI(KC_F19), LSA(KC_TAB) /* ALT + Shift + TAB */, LGUI(KC_F20),
