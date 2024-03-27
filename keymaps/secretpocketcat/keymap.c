@@ -286,15 +286,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_WIN] = LAYOUT_polydactyl(
         // top L
-        LGUI(KC_J), LGUI(KC_W), LGUI(KC_F), LGUI(KC_P), XXXXXXX,
+        XXXXXXX, LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), XXXXXXX,
         // top R
         LGUI(KC_C), LGUI(KC_L), LGUI(KC_U), LGUI(KC_Y), LGUI(KC_B),
         // mid L
-        XXXXXXX, LGUI(KC_A), LGUI(KC_R), LGUI(KC_S), LGUI(KC_T), XXXXXXX,
+        XXXXXXX, LGUI(KC_0), LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), XXXXXXX,
         // mid R
-        LGUI(KC_H), LALT(KC_N), LGUI(KC_E), LGUI(KC_I), LGUI(KC_O), LGUI(KC_K),
+        LGUI(KC_H), LGUI(KC_N), LGUI(KC_E), LGUI(KC_I), LGUI(KC_O), LGUI(KC_K),
         // bottom L
-        XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
+        XXXXXXX, KC_LALT, KC_4, MT(MOD_LSFT, KC_5), KC_6, XXXXXXX, XXXXXXX,
         // bottom R
         XXXXXXX, XXXXXXX, LGUI(KC_F21), LGUI(KC_F22), LGUI(KC_F23), LGUI(KC_F24), XXXXXXX,
         // thumb L
