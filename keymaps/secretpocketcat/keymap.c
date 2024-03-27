@@ -107,8 +107,6 @@ enum unicode_names {
     T_CARON_UPPER,
     Z_CARON,
     Z_CARON_UPPER,
-    CURR_USD,
-    CURR_EUR,
     EMJ_SMILE,
     EMJ_TEARS_OF_JOY,
     EMJ_GRIN,
@@ -156,9 +154,6 @@ const uint32_t PROGMEM unicode_map[] = {
     [T_CARON_UPPER] = 0x0164,
     [Z_CARON]       = 0x017E,
     [Z_CARON_UPPER] = 0x017D,
-    // Currency
-    [CURR_USD] = 0x0024,
-    [CURR_EUR] = 0x20AC,
     // Emoji
     [EMJ_SMILE]        = 0x1F642,
     [EMJ_TEARS_OF_JOY] = 0x1F602,
@@ -236,7 +231,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_SYM] = LAYOUT_polydactyl(
         // top L
-        KC_PERC, KC_CIRCUMFLEX /* ^ */, KC_HASH, XP(CURR_USD, CURR_EUR) /* $/€ */, KC_TILDE,
+        KC_PERC, KC_CIRCUMFLEX /* ^ */, KC_HASH, KC_DOLLAR, KC_TILDE,
         // top R
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // mid L
@@ -275,19 +270,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // top L
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         // top R
-        XP(U_ACUTE, U_ACUTE_UPPER), XP(U_RING, U_RING_UPPER), XP(D_CARON, D_CARON_UPPER), XP(N_CARON, N_CARON_UPPER), XP(T_CARON, T_CARON_UPPER),
+        UP(U_ACUTE, U_ACUTE_UPPER), UP(U_RING, U_RING_UPPER), UP(D_CARON, D_CARON_UPPER), UP(N_CARON, N_CARON_UPPER), UP(T_CARON, T_CARON_UPPER),
         // mid L
-        XXXXXXX, XP(A_ACUTE, A_ACUTE_UPPER), XP(R_CARON, R_CARON_UPPER), XP(S_CARON, S_CARON_UPPER), XP(Z_CARON, Z_CARON_UPPER), XXXXXXX,
+        XXXXXXX, UP(A_ACUTE, A_ACUTE_UPPER), UP(R_CARON, R_CARON_UPPER), UP(S_CARON, S_CARON_UPPER), UP(Z_CARON, Z_CARON_UPPER), XXXXXXX,
         // mid R
-        XP(C_CARON, C_CARON_UPPER), XP(E_CARON, E_CARON_UPPER), XP(E_ACUTE, E_ACUTE_UPPER), XP(I_ACUTE, I_ACUTE_UPPER), XP(Y_ACUTE, Y_ACUTE_UPPER), XP(O_ACUTE, O_ACUTE_UPPER),
+        UP(C_CARON, C_CARON_UPPER), UP(E_CARON, E_CARON_UPPER), UP(E_ACUTE, E_ACUTE_UPPER), UP(I_ACUTE, I_ACUTE_UPPER), UP(Y_ACUTE, Y_ACUTE_UPPER), UP(O_ACUTE, O_ACUTE_UPPER),
         // bottom L
         XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, XP(EMJ_TONGUE, EMJ_BLOW_KISS), KC_RSFT, XP(EMJ_VOMIT, EMJ_NAUSEA), XP(EMJ_THUMBS_UP, EMJ_SUS), XXXXXXX,
+        XXXXXXX, XXXXXXX, UP(EMJ_TONGUE, EMJ_BLOW_KISS), KC_RSFT, UP(EMJ_VOMIT, EMJ_NAUSEA), UP(EMJ_THUMBS_UP, EMJ_SUS), XXXXXXX,
         // thumb L
         XXXXXXX, XXXXXXX, MO(_UNI), XXXXXXX,
         // thumb R
-        XXXXXXX, XP(EMJ_SAD, EMJ_TEARS), XP(EMJ_GRIN, EMJ_GRIN_SWEAT), XP(EMJ_SMILE, EMJ_TEARS_OF_JOY)),
+        XXXXXXX, UP(EMJ_SAD, EMJ_TEARS), UP(EMJ_GRIN, EMJ_GRIN_SWEAT), UP(EMJ_SMILE, EMJ_TEARS_OF_JOY)),
 
     [_WIN] = LAYOUT_polydactyl(
         // top L
@@ -346,9 +341,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 case MT_ALT_QUESTIONMARK:
                     tap_code16(KC_QUESTION);
                     return false;
-                    // case LT_BKCSP_WORD:
-                    //     SEND_STRING(SS_RCTL(SS_TAP(X_BACKSPACE)));
-                    //     return false;
             }
         }
 
@@ -357,6 +349,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             bool nl        = false;
 
             switch (keycode) {
+                case KC_DOLLAR:
+                    // send € when $ is shifted (the keycode is already shifted, that's why it's checking actual mod_state)
+                    clear_all_mods();
+                    register_unicode(0x20AC);
+                    restore_non_shift_mods();
+                    return false;
                 case SC_LSPO:
                 case SC_RSPC:
                     clear_all_mods();
