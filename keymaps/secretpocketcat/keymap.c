@@ -286,14 +286,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_WIN] = LAYOUT_polydactyl(
         // top L
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        LGUI(KC_J), LGUI(KC_W), LGUI(KC_F), LGUI(KC_P), XXXXXXX,
         // top R
-        LGUI(KC_C), LGUI(KC_F13), LGUI(KC_F14), LGUI(KC_F15), LGUI(KC_F16),
+        LGUI(KC_C), LGUI(KC_L), LGUI(KC_U), LGUI(KC_Y), LGUI(KC_B),
         // mid L
         XXXXXXX, LGUI(KC_A), LGUI(KC_R), LGUI(KC_S), LGUI(KC_T), XXXXXXX,
         // mid R
         // todo: use alt-tab actually
-        LGUI(KC_F17), LALT(KC_TAB) /* ALT + TAB */, LGUI(KC_F18), LGUI(KC_F19), LSA(KC_TAB) /* ALT + Shift + TAB */, LGUI(KC_F20),
+        LGUI(KC_N), LALT(KC_E), LGUI(KC_I), LGUI(KC_I), LGUI(KC_O), LGUI(KC_K),
         // bottom L
         XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
@@ -301,7 +301,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // thumb L
         MO(_WIN), XXXXXXX, XXXXXXX, XXXXXXX,
         // thumb R
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX),
+        XXXXXXX, XXXXXXX, LGUI(KC_ENTER), XXXXXXX),
 };
 
 uint8_t mod_state;
