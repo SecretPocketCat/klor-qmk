@@ -292,8 +292,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid L
         XXXXXXX, LGUI(KC_A), LGUI(KC_R), LGUI(KC_S), LGUI(KC_T), XXXXXXX,
         // mid R
-        // todo: use alt-tab actually
-        LGUI(KC_N), LALT(KC_E), LGUI(KC_I), LGUI(KC_I), LGUI(KC_O), LGUI(KC_K),
+        LGUI(KC_H), LALT(KC_N), LGUI(KC_E), LGUI(KC_I), LGUI(KC_O), LGUI(KC_K),
         // bottom L
         XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, KC_LGUI, XXXXXXX, XXXXXXX,
         // bottom R
@@ -301,7 +300,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // thumb L
         MO(_WIN), XXXXXXX, XXXXXXX, XXXXXXX,
         // thumb R
-        XXXXXXX, XXXXXXX, LGUI(KC_ENTER), XXXXXXX),
+        XXXXXXX, XXXXXXX, LGUI(KC_F20), XXXXXXX),
 };
 
 uint8_t mod_state;
