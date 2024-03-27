@@ -225,7 +225,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // bottom R
         XXXXXXX, XXXXXXX, KC_RGUI, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX,
         // thumb L
-        KC_COMMA, KC_EQUAL, KC_DOT, XXXXXXX,
+        LGUI(KC_F20), KC_EQUAL, KC_DOT, XXXXXXX,
         // thumb R
         XXXXXXX, XXXXXXX, MO(_NUM), XXXXXXX),
 
