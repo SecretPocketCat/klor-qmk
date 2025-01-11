@@ -184,9 +184,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid R
         KC_H, KC_N, KC_E, KC_I, KC_O, KC_K,
         // bottom L
-        XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_COMMA), SC_LSPO, KC_V, XXXXXXX, XXXXXXX,
+        XXXXXXX, KC_LALT, MT(MOD_LCTL, KC_COMMA), SC_LSPO, MT(MOD_LGUI, KC_V), XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, KC_M, SC_RSPC, MT(MOD_LCTL, KC_DOT), MT_ALT_QUESTIONMARK, XXXXXXX,
+        XXXXXXX, XXXXXXX, MT(MOD_RGUI, KC_M), SC_RSPC, MT(MOD_LCTL, KC_DOT), MT_ALT_QUESTIONMARK, XXXXXXX,
         // thumb L
         LT(_WIN, KC_ESC), LT(_NAV, KC_SPC), LT(_UNI, KC_TAB), XXXXXXX,
         // thumb R
