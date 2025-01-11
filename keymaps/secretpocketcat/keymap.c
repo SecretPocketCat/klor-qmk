@@ -18,11 +18,13 @@ uint32_t alive(uint32_t trigger_time, void *cb_arg) {
 uint32_t detect_host(uint32_t trigger_time, void *cb_arg) {
     int host = detected_host_os();
 
-    // check for Windows, but fallback to linux in all other cases
+    // check for Windows and linux, but fallback to mac otherwise
     if (host == OS_WINDOWS) {
         set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
-    } else {
+    } else if (host == OS_LINUX) {
         set_unicode_input_mode(UNICODE_MODE_LINUX);
+    } else {
+        set_unicode_input_mode(UNICODE_MODE_MACOS);
     }
 
 #ifdef CONSOLE_ENABLE
