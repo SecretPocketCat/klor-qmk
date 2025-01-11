@@ -205,6 +205,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // mid R
         XXXXXXX /* TODO: */, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, QK_CAPS_WORD_TOGGLE,
         // bottom L
+        // todo: IIRC the sticky mods don't work across layers
         XXXXXXX, OSM(MOD_LALT), OSM(MOD_LCTL), OSM(MOD_LSFT), OSM(MOD_LGUI), XXXXXXX, XXXXXXX,
         // bottom R - TODO: TILING WIN MANAGMENT? MOUSE ARROWS?
         XXXXXXX, XXXXXXX, LGUI(KC_KP_5), LGUI(KC_KP_6), LGUI(KC_KP_7), KC_CAPS_LOCK, XXXXXXX,
@@ -227,7 +228,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // bottom R
         XXXXXXX, XXXXXXX, KC_RGUI, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX,
         // thumb L
-        LGUI(KC_F20), KC_EQUAL, KC_DOT, XXXXXXX,
+        LGUI(KC_F20) /* todo: reuse - no longer used */, KC_EQUAL, KC_DOT, XXXXXXX,
         // thumb R
         XXXXXXX, XXXXXXX, MO(_NUM), XXXXXXX),
 
@@ -298,7 +299,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // bottom L
         XXXXXXX, KC_LALT, KC_4, MT(MOD_LSFT, KC_5), KC_6, XXXXXXX, XXXXXXX,
         // bottom R
-        XXXXXXX, XXXXXXX, LGUI(KC_F21), LGUI(KC_F22), LGUI(KC_F23), LGUI(KC_F24), XXXXXXX,
+        XXXXXXX, XXXXXXX, LGUI(KC_F21), KC_LSFT, LGUI(KC_F23), LGUI(KC_F24), XXXXXXX,
         // thumb L
         MO(_WIN), XXXXXXX, XXXXXXX, XXXXXXX,
         // thumb R
