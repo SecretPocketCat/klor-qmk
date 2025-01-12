@@ -15,9 +15,8 @@ uint32_t alive(uint32_t trigger_time, void *cb_arg) {
     return 60000;
 }
 
-uint32_t detect_host(uint32_t trigger_time, void *cb_arg) {
+void run_host_detection(void) {
     int host = detected_host_os();
-
     // check for Windows and linux, but fallback to mac otherwise
     if (host == OS_WINDOWS) {
         set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
@@ -26,12 +25,14 @@ uint32_t detect_host(uint32_t trigger_time, void *cb_arg) {
     } else {
         set_unicode_input_mode(UNICODE_MODE_MACOS);
     }
-
 #ifdef CONSOLE_ENABLE
     uprintf("host OS=%d\n", host);
 #endif
+}
 
-    // don't repeat
+uint32_t detect_host(uint32_t trigger_time, void *cb_arg) {
+    run_host_detection();
+    // don't repeat deferred exec
     return 0;
 }
 
@@ -47,6 +48,7 @@ void keyboard_post_init_user(void) {
     defer_exec(3000, detect_host, NULL);
 }
 
+#ifdef CONSOLE_ENABLE
 // Idle
 void suspend_power_down_user(void) {
     uprintf("Idle\n");
@@ -55,6 +57,23 @@ void suspend_power_down_user(void) {
 void suspend_wakeup_init_user(void) {
     uprintf("Wakeup\n");
 }
+#endif
+
+#ifdef RAW_ENABLE
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    uint8_t kind = data[0];
+    #ifdef CONSOLE_ENABLE
+        uprintf("hid kind=%d\n", kind);
+    #endif
+    if (kind == 42) {
+        // rerun host detection
+        run_host_detection();
+        #ifdef CONSOLE_ENABLE
+            uprintf("new host OS");
+        #endif
+   }
+}
+#endif
 
 // Custom keys
 enum klor_layers {

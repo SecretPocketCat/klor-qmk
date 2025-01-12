@@ -22,8 +22,6 @@ for more options.
 
 #define COMBO_COUNT 1
 
-//
-
 // Unicode
 #define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX, UNICODE_MODE_WINCOMPOSE, UNICODE_MODE_MACOS
 
@@ -37,3 +35,7 @@ for more options.
 
 // Console - save flash
 #define USER_PRINT
+
+// HID
+#define RAW_USAGE_PAGE 0xFF60
+#define RAW_USAGE_ID 0x61
