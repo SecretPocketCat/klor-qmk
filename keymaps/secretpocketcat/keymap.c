@@ -10,42 +10,42 @@
 // Init
 uint32_t alive(uint32_t trigger_time, void *cb_arg) {
     uprintf("Alive: %2u min\n", trigger_time / 1000 / 60);
-
     // repeat after given delay
     return 60000;
 }
 
-void run_host_detection(void) {
-    int host = detected_host_os();
-    // check for Windows and linux, but fallback to mac otherwise
-    if (host == OS_WINDOWS) {
-        set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
-    } else if (host == OS_LINUX) {
-        set_unicode_input_mode(UNICODE_MODE_LINUX);
-    } else {
-        set_unicode_input_mode(UNICODE_MODE_MACOS);
-    }
+void update_host(os_variant_t host_os) {
 #ifdef CONSOLE_ENABLE
-    uprintf("host OS=%d\n", host);
+    uprintf("host OS=%d\n", host_os);
 #endif
+    
+    // check for Windows and linux, but fallback to mac otherwise
+    switch (host_os) {
+        case OS_LINUX:
+            set_unicode_input_mode(UNICODE_MODE_LINUX);
+            break;
+        case OS_WINDOWS:
+            set_unicode_input_mode(UNICODE_MODE_WINCOMPOSE);
+            break;
+        default:
+            set_unicode_input_mode(UNICODE_MODE_MACOS);
+            break;
+    }      
 }
 
-uint32_t detect_host(uint32_t trigger_time, void *cb_arg) {
-    run_host_detection();
-    // don't repeat deferred exec
-    return 0;
+// use OS detection (a guess based on some USB wizadry) to set unicode input mode
+// this might not work during startup hence running it after a slight delay
+// https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
+// https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
+bool process_detected_host_os_user(os_variant_t detected_os) {
+    update_host(detected_os);
+    return true;
 }
 
 void keyboard_post_init_user(void) {
 #ifdef CONSOLE_ENABLE
     defer_exec(60000, alive, NULL);
 #endif
-
-    // use OS detection (a guess based on some USB wizadry) to set unicode input mode
-    // this might not work during startup hence running it after a slight delay
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
-    // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
-    defer_exec(3000, detect_host, NULL);
 }
 
 #ifdef CONSOLE_ENABLE
@@ -66,8 +66,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         uprintf("hid kind=%d\n", kind);
     #endif
     if (kind == 42) {
-        // rerun host detection
-        run_host_detection();
+        update_host(data[1]);
         #ifdef CONSOLE_ENABLE
             uprintf("new host OS");
         #endif
