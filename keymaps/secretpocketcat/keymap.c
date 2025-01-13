@@ -14,6 +14,8 @@ uint32_t alive(uint32_t trigger_time, void *cb_arg) {
     return 60000;
 }
 
+bool disable_host_detection = false;
+
 void update_host(os_variant_t host_os) {
 #ifdef CONSOLE_ENABLE
     uprintf("host OS=%d\n", host_os);
@@ -38,7 +40,9 @@ void update_host(os_variant_t host_os) {
 // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_os_detection.md
 // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_unicode.md
 bool process_detected_host_os_user(os_variant_t detected_os) {
-    update_host(detected_os);
+    if (!disable_host_detection) {
+        update_host(detected_os);
+    }
     return true;
 }
 
@@ -66,6 +70,8 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         uprintf("hid kind=%d\n", kind);
     #endif
     if (kind == 42) {
+        // set from host, so no need to try to autodetect the host then
+        disable_host_detection = true;
         update_host(data[1]);
         #ifdef CONSOLE_ENABLE
             uprintf("new host OS\n");
