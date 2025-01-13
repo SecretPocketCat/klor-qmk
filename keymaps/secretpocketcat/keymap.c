@@ -68,7 +68,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
     if (kind == 42) {
         update_host(data[1]);
         #ifdef CONSOLE_ENABLE
-            uprintf("new host OS");
+            uprintf("new host OS\n");
         #endif
    }
 }
